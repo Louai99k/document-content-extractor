@@ -1,0 +1,29 @@
+services:
+  extractor:
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - HF_API_KEY=${HF_API_KEY:-}
+      - OLLAMA_HOST=http://ollama:11434
+    command: ["--mode", "both", "--images", "llm"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: >
+      sh -c "ollama serve &
+             sleep 5 &&
+             ollama pull llava:7b 2>/dev/null &&
+             tail -f /dev/null"
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list 2>/dev/null | grep -q llava"]
+      interval: 15s
+      timeout: 30s
+      retries: 20
+      start_period: 120s
+
+volumes:
+  ollama_data:

@@ -1,0 +1,21 @@
+# Document Content Extractor Configuration
+# CLI flags override these values
+
+input_dir: /data/input
+output_dir: /data/output
+output_mode: both  # combined | per-file | both
+
+image:
+  mode: ocr  # extract | ocr | llm | skip
+  ocr_lang: tur+eng
+  llm:
+    # auto: try GEMINI_API_KEY → OLLAMA_HOST → HuggingFace free
+    # gemini | ollama | huggingface: force specific backend
+    backend: auto
+    gemini:
+      model: gemini-1.5-flash
+    ollama:
+      model: llava:7b
+      host: http://ollama:11434
+    huggingface:
+      model: Salesforce/blip-image-captioning-large

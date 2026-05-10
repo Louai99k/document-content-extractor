@@ -1,0 +1,10 @@
+services:
+  extractor:
+    build: .
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - HF_API_KEY=${HF_API_KEY:-}
+    volumes:
+      - ./input:/data/input
+      - ./output:/data/output
+    command: ["--mode", "both", "--images", "ocr"]
