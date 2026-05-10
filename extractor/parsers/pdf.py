@@ -23,10 +23,19 @@ def parse_pdf(filepath, out_dir, config):
             lines.append("")
 
         if img_mode != "skip":
+            f_cfg = config["image"].get("filter", {})
+            min_w = f_cfg.get("min_width", 0)
+            min_h = f_cfg.get("min_height", 0)
+
             imgs = page.get_images(full=True)
             for idx, img in enumerate(imgs):
                 xref = img[0]
                 pix = fitz.Pixmap(doc, xref)
+
+                if pix.width < min_w or pix.height < min_h:
+                    print(f"    filtered: {pix.width}x{pix.height} < {min_w}x{min_h}")
+                    continue
+
                 img_dir = os.path.join(out_dir, "images", name)
                 os.makedirs(img_dir, exist_ok=True)
                 rel = os.path.join("images", name, f"page_{pno+1}_img_{idx+1}.png")

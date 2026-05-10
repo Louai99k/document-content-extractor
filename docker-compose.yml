@@ -7,6 +7,8 @@ services:
     volumes:
       - ./input:/data/input
       - ./output:/data/output
+      - ./config.yaml:/app/config.yaml
+      - ./extractor:/app/extractor
     command: ["--mode", "both", "--images", "ocr"]
 
   ollama:

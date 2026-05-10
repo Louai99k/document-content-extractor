@@ -3,11 +3,14 @@
 
 input_dir: /data/input
 output_dir: /data/output
-output_mode: both  # combined | per-file | both
+output_mode: both # combined | per-file | both
 
 image:
-  mode: ocr  # extract | ocr | llm | skip
+  mode: ocr # extract | ocr | llm | skip
   ocr_lang: tur+eng
+  filter:
+    min_width: 1000
+    min_height: 1000
   llm:
     # auto: try GEMINI_API_KEY → OLLAMA_HOST → HuggingFace free
     # gemini | ollama | huggingface: force specific backend

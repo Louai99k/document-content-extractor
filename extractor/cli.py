@@ -18,7 +18,8 @@ def load_config():
         "image": {
             "mode": "ocr",
             "ocr_lang": "tur+eng",
-            "llm": {
+            "filter": {"min_width": 100, "min_height": 100},
+        "llm": {
                 "backend": "auto",
                 "gemini": {"model": "gemini-1.5-flash"},
                 "ollama": {"model": "llava:7b", "host": "http://ollama:11434"},
