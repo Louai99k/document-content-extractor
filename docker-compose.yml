@@ -8,3 +8,24 @@ services:
       - ./input:/data/input
       - ./output:/data/output
     command: ["--mode", "both", "--images", "ocr"]
+
+  ollama:
+    image: ollama/ollama
+    profiles:
+      - ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: >
+      sh -c "ollama serve &
+             sleep 5 &&
+             ollama pull llava:7b 2>/dev/null &&
+             tail -f /dev/null"
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list 2>/dev/null | grep -q llava"]
+      interval: 15s
+      timeout: 30s
+      retries: 20
+      start_period: 120s
+
+volumes:
+  ollama_data:

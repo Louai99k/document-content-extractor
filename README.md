@@ -55,32 +55,23 @@ When `--images llm`, the backend is chosen automatically:
 
 | Backend | How it works | Setup |
 |---------|-------------|-------|
-| `gemini` (default if key found) | Google Gemini 1.5 Flash API | Set `GEMINI_API_KEY` env var. Free from [aistudio.google.com](https://aistudio.google.com/apikey) — no credit card needed |
-| `ollama` | Local Ollama with vision model | Requires Ollama running + image model pulled |
-| `huggingface` | HuggingFace Inference API | No setup needed (rate-limited free tier). Optional `HF_API_KEY` for higher limits |
+| `gemini` (default if key found) | Google Gemini 1.5 Flash API | Set `GEMINI_API_KEY` in `.env`. Free from [aistudio.google.com](https://aistudio.google.com/apikey) — no credit card needed |
+| `ollama` | Local Ollama with vision model | `COMPOSE_PROFILE=ollama ./run.sh --images llm` (pulls model automatically) |
+| `huggingface` | HuggingFace Inference API | No setup needed (rate-limited free tier). Optional `HF_API_KEY` in `.env` for higher limits |
 | `auto` (default) | Checks `GEMINI_API_KEY` → `OLLAMA_HOST` → HuggingFace free | — |
 
 **Gemini (recommended cloud — free, no credit card):**
 
 1. Get API key: https://aistudio.google.com/apikey
-2. Copy `.env.example` to `.env` and set key:
-
-```bash
-cp .env.example .env
-# Edit .env → GEMINI_API_KEY=your_key_here
-```
-3. Run:
-
-```bash
-./run.sh --images llm
-```
+2. `cp .env.example .env` → set `GEMINI_API_KEY=your_key`
+3. `./run.sh --images llm`
 
 **Local Ollama:**
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.vision.yml run --rm extractor --images llm
+COMPOSE_PROFILE=ollama ./run.sh --images llm
 ```
 
-This starts Ollama with `llava:7b`, downloads model on first run (~4GB).
+Starts Ollama sidecar, pulls `llava:7b` on first run (~4GB).
 
 **Force specific backend:**
 ```bash
